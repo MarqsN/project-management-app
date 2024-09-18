@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekthantering & Bokföring</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Välkommen till Projekthantering & Bokföring</h1>
+        <div class="dashboard">
+            <h2>Dina projekt</h2>
+            <div id="projectList"></div>
+        </div>
+        
+        <div class="form-section">
+            <h3>Skapa nytt projekt</h3>
+            <form id="createProjectForm">
+                <label for="projectName">Projektnamn:</label>
+                <input type="text" id="projectName" name="projectName" required>
+                <button type="submit">Skapa Projekt</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('createProjectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const projectName = document.getElementById('projectName').value;
+            
+            fetch('/projects', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: projectName }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                const projectList = document.getElementById('projectList');
+                const newProject = document.createElement('div');
+                newProject.innerHTML = `<strong>${data.name}</strong>`;
+                projectList.appendChild(newProject);
+            });
+        });
+    </script>
+</body>
+</html>
